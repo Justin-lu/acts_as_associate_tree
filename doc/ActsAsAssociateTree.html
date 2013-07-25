@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>module ActsAsAssociateTree - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>acts_as_associate_tree.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-generate_tree_nodes">::generate_tree_nodes</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./ActsAsAssociateTree.html">ActsAsAssociateTree</a>
+  
+    <li><a href="./ActsAsAssociateTree/AssociateTreeError.html">ActsAsAssociateTree::AssociateTreeError</a>
+  
+    <li><a href="./ActsAsAssociateTree/NodeSet.html">ActsAsAssociateTree::NodeSet</a>
+  
+    <li><a href="./ActsAsAssociateTree/SetTree.html">ActsAsAssociateTree::SetTree</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="module">module ActsAsAssociateTree</h1>
+
+  <div id="description" class="description">
+    
+<p>Module <a href="ActsAsAssociateTree.html">ActsAsAssociateTree</a></p>
+
+<p>Used for generating tree-like data</p>
+
+<p>Interface: <a
+href="ActsAsAssociateTree.html#method-c-generate_tree_nodes">::generate_tree_nodes</a></p>
+
+<p>Suppose you have a class like this</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span>
+  <span class="ruby-identifier">attr_reader</span> :<span class="ruby-identifier">i</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">i</span>)
+    <span class="ruby-ivar">@i</span> = <span class="ruby-identifier">i</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">items</span>
+    <span class="ruby-identifier">foo_items</span> = []
+    <span class="ruby-identifier">i</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">foo_items</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Foo</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;Item&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">i</span>.<span class="ruby-identifier">to_s</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">foo_items</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier">all</span>
+      <span class="ruby-identifier">all_foos</span> = []
+      <span class="ruby-value">2</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">all_foos</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Foo</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">i</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">all_foos</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">generate_tree_nodes</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">nodes</span> { <span class="ruby-constant">Foo</span>.<span class="ruby-identifier">all</span> }
+  <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">i</span> } } <span class="ruby-comment"># invoke this block by the instance_eval</span>
+                                <span class="ruby-comment"># method of each element in nodes</span>
+  <span class="ruby-identifier">children</span> {
+    <span class="ruby-identifier">nodes</span> { <span class="ruby-identifier">items</span> }
+    <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">i</span> } } <span class="ruby-comment"># using nodes#element.instance_eval to run this block</span>
+  }
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>it will return a array like bellow:</p>
+
+<pre class="ruby">[{
+  :<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>[{
+    :<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;Item0&quot;</span>,
+    :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>
+  }]
+}, {
+  :<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>[{
+    :<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;Item0&quot;</span>,
+    :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>
+  }, {
+    :<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;Item1&quot;</span>,
+    :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>
+  }]
+}]
+</pre>
+
+<p>include this module in your controller or model or any of your classes used
+to generating tree-like datas, you will get a instance function
+<code>generate_tree_nodes</code>, then you could use it this way.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Parent</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+   <span class="ruby-identifier">has_many</span> :<span class="ruby-identifier">children</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Child</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">parent</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>其数据如下:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Parent.all</span>
+<span class="ruby-comment"># +-------+---------+</span>
+<span class="ruby-comment"># | id    | name    |</span>
+<span class="ruby-comment"># +-------+---------+</span>
+<span class="ruby-comment"># | 1     | xx1     |</span>
+<span class="ruby-comment"># | 2     | xx2     |</span>
+<span class="ruby-comment"># | 3     | xx3     |</span>
+<span class="ruby-comment"># | 4     | xx4     |</span>
+<span class="ruby-comment"># | 5     | xx5     |</span>
+<span class="ruby-comment"># +-------+---------+</span>
+
+<span class="ruby-comment"># Child.all</span>
+<span class="ruby-comment"># +-------+--------------+--------+</span>
+<span class="ruby-comment"># | id    | parent_id    | name   |</span>
+<span class="ruby-comment"># +-------+--------------+--------+</span>
+<span class="ruby-comment"># | 1     | 1            | xx0    |</span>
+<span class="ruby-comment"># | 2     | 1            | xx1    |</span>
+<span class="ruby-comment"># | 3     | 1            | xx2    |</span>
+<span class="ruby-comment"># | 4     | 2            | xx0    |</span>
+<span class="ruby-comment"># | 5     | 2            | xx1    |</span>
+<span class="ruby-comment"># +-------+--------------+--------+</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">ParentController</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ApplicationController</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">ActsAsAssociateTree</span>
+
+  <span class="ruby-comment"># GET /parent/index_tree.json</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">index_tree</span>
+    <span class="ruby-identifier">special_tag</span> = <span class="ruby-string">'special_tag'</span>
+    <span class="ruby-identifier">render</span> :<span class="ruby-identifier">josn</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">generate_tree_nodes</span> {
+      <span class="ruby-comment"># 一个树可以有不同的结点集</span>
+      <span class="ruby-identifier">add_set</span> {
+        <span class="ruby-identifier">nodes</span> { <span class="ruby-constant">Parent</span>.<span class="ruby-identifier">all</span> }  <span class="ruby-comment"># 结点的数据，block的执行结果需返回一个数组</span>
+        <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span> } }  <span class="ruby-comment"># 结点属性，block执行结果需返回一个Hash实例，block 中可以执行任何一个 Parent 实例能执行的方法</span>
+        <span class="ruby-identifier">children</span> { 
+          <span class="ruby-identifier">nodes</span> { <span class="ruby-identifier">children</span> }  <span class="ruby-comment"># 在子结点中可以执行任何一个 Parent 实例能执行的方法</span>
+          <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, :<span class="ruby-identifier">special</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">special_tag</span> <span class="ruby-operator">:</span> <span class="ruby-string">'nothing'</span> } }  <span class="ruby-comment"># 每一个 block 中都能访问闭包变量，如 special_tag</span>
+        }
+        <span class="ruby-comment"># 可以添加多个子节点</span>
+        <span class="ruby-identifier">children</span> {
+          <span class="ruby-identifier">nodes</span> { [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>] }
+          <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span> } }
+        }
+      }
+      <span class="ruby-comment"># 其他结点集</span>
+      <span class="ruby-identifier">add_set</span> {
+        <span class="ruby-identifier">set_attrs</span> { { :<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'i am a tree nodes set'</span> } }  <span class="ruby-comment"># 可以添加结点集描述</span>
+        <span class="ruby-identifier">nodes</span> { <span class="ruby-node">%w(act_as_associate_tree is so powerful)</span> }
+        <span class="ruby-identifier">node_attrs</span> { { :<span class="ruby-identifier">text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span> } }
+      }
+    }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p><code>index_tree</code> 方法会返回如下形式的数据</p>
+
+<pre class="ruby">[{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx1&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx0&quot;</span>, :<span class="ruby-identifier">special=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;special_tag&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx1&quot;</span>, :<span class="ruby-identifier">special=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;nothing&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx2&quot;</span>, :<span class="ruby-identifier">special=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;nothing&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">3</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">4</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">5</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]},
+ {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx2&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx0&quot;</span>, :<span class="ruby-identifier">special=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;nothing&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx1&quot;</span>, :<span class="ruby-identifier">special=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;nothing&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">3</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">4</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">5</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]},
+ {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx3&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">3</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">4</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">5</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]},
+ {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx4&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">3</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">4</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">5</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]},
+ {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;xx5&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">3</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">4</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">5</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]},
+ {:<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;i am a tree nodes set&quot;</span>,
+  :<span class="ruby-identifier">children=</span><span class="ruby-operator">&gt;</span>
+   [{:<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;act_as_associate_tree&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;is&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;so&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>},
+    {:<span class="ruby-identifier">text=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;powerful&quot;</span>, :<span class="ruby-identifier">leaf=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>}]}]
+</pre>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-generate_tree_nodes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">generate_tree_nodes</span><span
+            class="method-args">(&block)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>act_as_associate_tree 的统一接口，传入结点构造器后，产生结点</p>
+          
+
+          
+          <div class="method-source-code" id="generate_tree_nodes-source">
+            <pre><span class="ruby-comment"># File acts_as_associate_tree.rb, line 298</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_tree_nodes</span> &amp;<span class="ruby-identifier">block</span>
+  (<span class="ruby-constant">SetTree</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">instance_eval</span> &amp;<span class="ruby-identifier">block</span>).<span class="ruby-identifier">expand_sets</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- generate_tree_nodes-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- generate_tree_nodes-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
